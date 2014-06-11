@@ -1,0 +1,35 @@
+{
+  "name": "irish-pub",
+  "version": "0.0.0",
+  "description": "Feel like npm is drunk or maybe you are and want to verify what gets published via `npm publish`? irish-pub has you covered.",
+  "main": "index.js",
+  "bin": "./bin/irish-pub.js",
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thlorenz/irish-pub.git"
+  },
+  "homepage": "https://github.com/thlorenz/irish-pub",
+  "dependencies": {
+    "readable-stream": "~1.0.27-1",
+    "tar": "~0.1.19"
+  },
+  "devDependencies": {
+    "tap": "~0.4.3"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Thorsten Lorenz",
+    "email": "thlorenz@gmx.de",
+    "url": "http://thlorenz.com"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/thlorenz/irish-pub/blob/master/LICENSE"
+  },
+  "engine": {
+    "node": ">=0.8"
+  }
+}
