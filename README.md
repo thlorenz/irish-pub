@@ -1,12 +1,10 @@
 # irish-pub [![build status](https://secure.travis-ci.org/thlorenz/irish-pub.png)](http://travis-ci.org/thlorenz/irish-pub)
 
-Feel like npm is drunk or maybe you are and want to verify what gets published via `npm publish`? irish-pub has you covered.
+Feel like npm is drunk or maybe you are and want to verify what gets published via `npm publish`? **irish-pub** has you covered.
 
 ```sh
-irish-pub
-```
+➝ irish-pub
 
-```text
 npm publish will include the following files:
 
 package.json
@@ -26,7 +24,7 @@ test/foo/lib/work.js
 
 ## Installation
 
-    npm install irish-pub
+    npm install -g irish-pub
 
 ## API
 

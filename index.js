@@ -46,12 +46,3 @@ function irishPub(root) {
 
   return out;
 }
-
-// Test
-if (!module.parent && typeof window === 'undefined') {
-  var root = __dirname + '/test/foo';
-
-  go(root)
-    .on('error', console.error)
-    .pipe(process.stdout)
-}
