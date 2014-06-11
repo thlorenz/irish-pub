@@ -1,6 +1,6 @@
 {
   "name": "irish-pub",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Feel like npm is drunk or maybe you are and want to verify what gets published via `npm publish`? irish-pub has you covered.",
   "main": "index.js",
   "bin": "./bin/irish-pub.js",
@@ -19,7 +19,12 @@
   "devDependencies": {
     "tap": "~0.4.3"
   },
-  "keywords": [ "npm", "publish", "pack", "secret" ],
+  "keywords": [
+    "npm",
+    "publish",
+    "pack",
+    "secret"
+  ],
   "author": {
     "name": "Thorsten Lorenz",
     "email": "thlorenz@gmx.de",
