@@ -1,6 +1,7 @@
 'use strict';
 
-var path = require('path')
+var exec = require('child_process').exec
+  , path = require('path')
   , PassThrough = require('readable-stream').PassThrough
   , Packer = require('fstream-npm')
 
@@ -22,15 +23,31 @@ function irishPub(root) {
   root = root || process.cwd();
 
   var out = new PassThrough();
+  var scripts = require(path.join(root, 'package.json')).scripts;
 
-  Packer(root)
-    .on('error', out.emit.bind(out, 'error'))
-    .on('child', function (entry) {
-      out.write(localName(entry.path, entry.root.path) + '\n');
-    })
-    .on('end', function () {
-      out.emit('end');
+  var printPaths = function () {
+    Packer(root)
+      .on('error', out.emit.bind(out, 'error'))
+      .on('child', function (entry) {
+        out.write(localName(entry.path, entry.root.path) + '\n');
+      })
+      .on('end', function () {
+        out.emit('end');
+      });
+  };
+
+  if (scripts && scripts.prepublish) {
+    exec(scripts.prepublish, function (err) {
+      if (err) {
+        out.emit('error', err);
+        return;
+      }
+      printPaths();
     });
+  }
+  else {
+    printPaths();
+  }
 
   return out;
 }
