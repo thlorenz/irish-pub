@@ -2,16 +2,18 @@
 
 var exec = require('child_process').exec
   , path = require('path')
-  , fs = require('fs')
   , PassThrough = require('readable-stream').PassThrough
-  , zlib = require('zlib')
-  , tar = require('tar')
+  , Packer = require('fstream-npm')
 
-var go = module.exports = 
+var localName = function (entryPath, rootPath) {
+  return entryPath.slice(path.dirname(rootPath).length + '/package/'.length);
+};
+
+var go = module.exports =
 
 /**
- * Invokes `npm pack` to determine what would be included during `npm publish`.
- * 
+ * Uses `fstream-npm` to determine what would be included during `npm publish`.
+ *
  * @name irishPub
  * @function
  * @param {string} root path to package to publish, defaults to `cwd`
@@ -21,28 +23,31 @@ function irishPub(root) {
   root = root || process.cwd();
 
   var out = new PassThrough();
-  exec('npm pack ' + root, function (err, stderr, stdout) {
-    if (err) return console.error(err);
+  var scripts = require(path.join(root, 'package.json')).scripts;
 
-    // npm logs created filename on stderr
-    var tarFile = path.join(process.cwd(), stderr.trim()); 
-
-    fs.createReadStream(tarFile)
+  var printPaths = function () {
+    Packer(root)
       .on('error', out.emit.bind(out, 'error'))
-      .pipe(zlib.createGunzip())
-      .on('error', out.emit.bind(out, 'error'))
-      .pipe(tar.Parse())
-      .on('error', out.emit.bind(out, 'error'))
-      .on('entry', function (e) {
-        out.write(e.path.replace(/^package\//, '') + '\n');
+      .on('child', function (entry) {
+        out.write(localName(entry.path, entry.root.path) + '\n');
       })
       .on('end', function () {
-        fs.unlink(tarFile, function (err) {
-          if (err) return out.emit(err);
-          out.emit('end')
-        })
-      })
-  })
+        out.emit('end');
+      });
+  };
+
+  if (scripts && scripts.prepublish) {
+    exec(scripts.prepublish, { cwd: root }, function (err) {
+      if (err) {
+        out.emit('error', err);
+        return;
+      }
+      printPaths();
+    });
+  }
+  else {
+    printPaths();
+  }
 
   return out;
 }
