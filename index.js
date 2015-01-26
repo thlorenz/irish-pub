@@ -37,7 +37,7 @@ function irishPub(root) {
   };
 
   if (scripts && scripts.prepublish) {
-    exec(scripts.prepublish, function (err) {
+    exec(scripts.prepublish, { cwd: root }, function (err) {
       if (err) {
         out.emit('error', err);
         return;
