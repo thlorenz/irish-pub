@@ -2,7 +2,12 @@
 'use strict';
 var irishPub = require('../')
 
-process.stdout.write('npm publish will include the following files:\n\n');
 irishPub(process.cwd())
-  .on('error', function (err) { console.error(err) })
-  .pipe(process.stdout)
+.on('metadata', function(meta) {
+  var details = meta.name + '@' + meta.version + ' as ' + meta.user;
+  console.log('npm will publish ' + details + ', including the following files:\n');
+})
+.on('error', function (err) {
+  console.error(err);
+})
+.pipe(process.stdout)

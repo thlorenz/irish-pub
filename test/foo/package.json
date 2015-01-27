@@ -1,6 +1,6 @@
 {
   "name": "foo",
-  "version": "0.0.0",
+  "version": "1.2.3",
   "description": "This pack has a .gitignore and no .npmignore",
   "main": "index.js",
   "scripts": {
