@@ -7,11 +7,11 @@ var exec = require('child_process').exec
   , zlib = require('zlib')
   , tar = require('tar')
 
-var go = module.exports = 
+var go = module.exports =
 
 /**
  * Invokes `npm pack` to determine what would be included during `npm publish`.
- * 
+ *
  * @name irishPub
  * @function
  * @param {string} root path to package to publish, defaults to `cwd`
@@ -21,11 +21,39 @@ function irishPub(root) {
   root = root || process.cwd();
 
   var out = new PassThrough();
+
+  getMetadata(root, function(err, meta) {
+    if (err) return out.emit('error', err);
+    out.emit('metadata', meta);
+    listFiles(root, out);
+  });
+  return out;
+}
+
+function getMetadata(root, callback) {
+  exec('npm whoami', function (err, stderr, stdout) {
+    if (err) return callback('Cannot get current npm user');
+    var npmUser = stderr.trim();
+    var packagePath = path.join(root, 'package.json');
+    try {
+      var pkg = require(packagePath);
+    } catch (ex) {
+      return callback('error', 'Invalid package: ' + packagePath);
+    }
+    callback(null, {
+      name: pkg.name,
+      version: pkg.version,
+      user: npmUser
+    });
+  });
+}
+
+function listFiles(root, out) {
   exec('npm pack ' + root, function (err, stderr, stdout) {
-    if (err) return console.error(err);
+    if (err) return out.emit('error', 'Failed to pack archive: ' + err);
 
     // npm logs created filename on stderr
-    var tarFile = path.join(process.cwd(), stderr.trim()); 
+    var tarFile = path.join(process.cwd(), stderr.trim());
 
     fs.createReadStream(tarFile)
       .on('error', out.emit.bind(out, 'error'))
@@ -43,6 +71,4 @@ function irishPub(root) {
         })
       })
   })
-
-  return out;
 }

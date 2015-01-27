@@ -5,7 +5,7 @@ Feel like npm is drunk or maybe you are and want to verify what gets published v
 ```sh
 ➝ irish-pub
 
-npm publish will include the following files:
+npm will publish irish-pub@1.0.0 as thlorenz, including the following files:
 
 package.json
 .npmignore
