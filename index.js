@@ -31,9 +31,9 @@ function irishPub(root) {
 }
 
 function getMetadata(root, callback) {
-  exec('npm whoami', function (err, stderr, stdout) {
+  exec('npm whoami', function (err, stdout, stderr) {
     if (err) return callback('Cannot get current npm user');
-    var npmUser = stderr.trim();
+    var npmUser = stdout.trim();
     var packagePath = path.join(root, 'package.json');
     try {
       var pkg = require(packagePath);
@@ -49,11 +49,11 @@ function getMetadata(root, callback) {
 }
 
 function listFiles(root, out) {
-  exec('npm pack ' + root, function (err, stderr, stdout) {
+  exec('npm pack ' + root, function (err, stdout, stderr) {
     if (err) return out.emit('error', 'Failed to pack archive: ' + err);
 
-    // npm logs created filename on stderr
-    var tarFile = path.join(process.cwd(), stderr.trim());
+    // npm logs created filename on stdout
+    var tarFile = path.join(process.cwd(), stdout.trim().split(/\n+/).pop());
 
     fs.createReadStream(tarFile)
       .on('error', out.emit.bind(out, 'error'))

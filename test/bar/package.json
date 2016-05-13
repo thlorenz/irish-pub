@@ -1,0 +1,12 @@
+{
+  "name": "bar",
+  "version": "1.2.3",
+  "description": "This package has a prepublish script",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "echo bar",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
