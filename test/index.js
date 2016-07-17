@@ -3,12 +3,16 @@
 
 var test = require('tap').test
   , irishPub = require('../')
+  , registry = require('./registry')
 
-function inspect(obj, depth) {
-  console.error(require('util').inspect(obj, false, depth || 5, true));
-}
+test('start registry server', function (t) {
+  t.plan(1);
+  registry(function (err) {
+    t.ifError(err);
+  });
+})
 
-test('\nfoo with .gitignore and no .npmignore', function (t) {
+test('foo with .gitignore and no .npmignore', function (t) {
   var root = __dirname + '/foo';
   var entries = []
   t.plan(4);
@@ -17,7 +21,7 @@ test('\nfoo with .gitignore and no .npmignore', function (t) {
     .on('metadata', function(meta) {
       t.equal(meta.name, 'foo');
       t.equal(meta.version, '1.2.3');
-      t.type(meta.user, 'string');
+      t.equal(meta.user, 'test-user');
     })
     .on('data', function (d) {
       entries.push(d.toString());
