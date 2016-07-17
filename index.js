@@ -38,7 +38,7 @@ function getMetadata(root, callback) {
     try {
       var pkg = require(packagePath);
     } catch (ex) {
-      return callback('error', 'Invalid package: ' + packagePath);
+      return callback('Invalid package: ' + ex);
     }
     callback(null, {
       name: pkg.name,
