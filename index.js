@@ -32,7 +32,7 @@ function irishPub(root) {
 
 function getMetadata(root, callback) {
   exec('npm whoami', function (err, stdout, stderr) {
-    if (err) return callback('Cannot get current npm user');
+    if (err) return callback('Cannot get current npm user: ' + err);
     var npmUser = stdout.trim();
     var packagePath = path.join(root, 'package.json');
     try {
