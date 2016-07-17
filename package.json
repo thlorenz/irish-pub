@@ -17,7 +17,7 @@
     "tar": "~0.1.19"
   },
   "devDependencies": {
-    "tap": "~0.4.3"
+    "tap": "~6.2.0"
   },
   "keywords": [
     "npm",
