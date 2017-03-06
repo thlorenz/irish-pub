@@ -25,7 +25,7 @@ function irishPub(root) {
   getMetadata(root, function(err, meta) {
     if (err) return out.emit('error', err);
     out.emit('metadata', meta);
-    listFiles(root, out);
+    listFiles(root, out, meta);
   });
   return out;
 }
@@ -48,12 +48,12 @@ function getMetadata(root, callback) {
   });
 }
 
-function listFiles(root, out) {
+function listFiles(root, out, meta) {
   exec('npm pack ' + root, function (err, stdout, stderr) {
     if (err) return out.emit('error', 'Failed to pack archive: ' + err);
 
     // npm logs created filename on stdout
-    var tarFile = path.join(process.cwd(), stdout.trim().split(/\n+/).pop());
+    var tarFile = path.join(process.cwd(), meta.name.replace('@', '').replace('/', '-') + '-' + meta.version + '.tgz');
 
     fs.createReadStream(tarFile)
       .on('error', out.emit.bind(out, 'error'))
