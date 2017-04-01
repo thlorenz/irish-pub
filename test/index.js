@@ -36,7 +36,7 @@ test('\nfoo with .gitignore and no .npmignore', function (t) {
     });
 })
 
-test('bar with prepublish script', function (t) {
+test('@scope/bar with prepublish script', function (t) {
   var root = __dirname + '/bar';
   var entries = []
   t.plan(1);
