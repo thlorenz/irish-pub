@@ -52,8 +52,11 @@ function listFiles(root, out, meta) {
   exec('npm pack ' + root, function (err, stdout, stderr) {
     if (err) return out.emit('error', 'Failed to pack archive: ' + err);
 
-    // npm logs created filename on stdout
-    var tarFile = path.join(process.cwd(), meta.name.replace('@', '').replace('/', '-') + '-' + meta.version + '.tgz');
+    // scoped packages get special treatment
+    var name = meta.name;
+    if (name[0] === '@') name = name.substr(1).replace(/\//g, '-');
+
+    var tarFile = path.join(process.cwd(), name + '-' + meta.version + '.tgz');
 
     fs.createReadStream(tarFile)
       .on('error', out.emit.bind(out, 'error'))
