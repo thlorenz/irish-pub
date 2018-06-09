@@ -55,3 +55,23 @@ test('bar with prepublish script', function (t) {
       t.end()
     });
 })
+
+test('@scope/bar with prepublish script', function (t) {
+  var root = __dirname + '/scope__bar';
+  var entries = []
+  t.plan(1);
+  irishPub(root)
+    .on('error', t.fail.bind(t))
+    .on('data', function (d) {
+      entries.push(d.toString());
+    })
+    .on('end', function () {
+      t.deepEqual(
+          entries
+        , [ 'package.json\n',
+            'index.js\n' ]
+        , 'emits all files that would be published'
+      )
+      t.end()
+    });
+})
